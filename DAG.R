@@ -69,38 +69,13 @@ setdiff(names(g),colnames(d))
 r = localTests(g, d, type='cis.chisq')
 plotLocalTestResults( r )
 
-plot_histogram <- function(variable,readable_name="variable"){
-  hist_name = paste("Histogram for", readable_name)
-  print(hist_name)
-  
-  dens = density(variable)
-  plot(dens)
-  polygon(dens, col="red", border="blue")
-  
-  h<-hist(variable, main=hist_name, xlab=readable_name)
-  xfit<-seq(min(variable),max(variable))
-  yfit<-dnorm(xfit,mean=mean(variable),sd=sd(variable))
-  yfit<- yfit*diff(h$mids[1:2])*length(variable)
-  lines(xfit,yfit,col="blue",lwd=2)
-  
-  print(paste("Mean:", mean(variable))) # Mean
-  print(paste("Standard deviation:", sd(variable))) # Standard deviation
-}
-
 Wife_age=d$Wa # Would be d$Wife_age when not abbreviating
-
-# Plot a histogram
-plot_histogram(Wife_age, "Wife age")
-abline(v=32, col="red") # Vertical line at the mean, age=32
-abline(h=85, col="red") # Horizontal line at the (eyeballed) average frequency, f=75
 
 # Binning, could alternatively be done with cut()
 Wife_age[Wife_age>=38]<-3
 Wife_age[Wife_age>=27]<-2
 Wife_age[Wife_age>3]<-1
-plot_histogram(Wife_age, "Wife age")
 
 r = localTests(g, d, type='cis.chisq')
 plotLocalTestResults( r ) # This prints the top 16 rows
 plotLocalTestResults( r[5:10,] )
-
