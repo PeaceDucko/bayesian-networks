@@ -1,4 +1,4 @@
-# Install packages. Commend this out when not.
+# Install packages. Comment this out when they are already installed.
 #install.packages("dagitty")
 library( dagitty )
 
@@ -8,31 +8,27 @@ file_location <- "C:/Users/ylja0/OneDrive/Documents/school/Radboud/Master/KW1-2/
 # The DAG we are going to test
 dag_string = '
 dag {
-"Contraceptive_method" [pos="-1.148,-0.509"]
-"Husband_education" [pos="-0.530,-1.205"]
-"Husband_occupation" [pos="-0.221,-1.205"]
-"Media_exposure" [pos="-0.731,-0.506"]
-"Number_children" [pos="-1.633,-0.527"]
-"Standard_of_living" [pos="-0.723,-0.845"]
-"Wife_age" [pos="-1.681,-1.208"]
-"Wife_education" [pos="-1.146,-1.208"]
-"Wife_religion" [pos="-1.488,-1.199"]
-"Wife_working" [pos="-0.891,-1.208"]
+"Contraceptive_method" [pos="-1.216,0.013"]
+"Husband_education" [pos="-0.614,-1.330"]
+"Husband_occupation" [pos="-0.234,-1.322"]
+"Media_exposure" [pos="-1.218,-0.544"]
+"Number_children" [pos="-1.748,-0.455"]
+"Standard_of_living" [pos="-0.475,-0.787"]
+"Wife_age" [pos="-1.767,-1.344"]
+"Wife_education" [pos="-1.234,-1.109"]
+"Wife_religion" [pos="-1.545,-1.347"]
+"Wife_working" [pos="-0.929,-1.327"]
 "Husband_education" -> "Standard_of_living"
 "Husband_occupation" -> "Standard_of_living"
 "Media_exposure" -> "Contraceptive_method"
 "Number_children" -> "Contraceptive_method"
 "Standard_of_living" -> "Contraceptive_method"
-"Standard_of_living" -> "Media_exposure"
-"Wife_age" -> "Contraceptive_method"
 "Wife_age" -> "Number_children"
-"Wife_education" -> "Contraceptive_method"
-"Wife_education" -> "Number_children"
-"Wife_education" -> "Standard_of_living"
-"Wife_religion" -> "Contraceptive_method"
-"Wife_religion" -> "Number_children"
-"Wife_working" -> "Contraceptive_method"
-"Wife_working" -> "Standard_of_living"
+"Wife_education" -> "Media_exposure"
+"Wife_religion" -> "Media_exposure"
+"Wife_religion" -> "Wife_education"
+"Wife_working" -> "Media_exposure"
+"Wife_education" -> "Husband_education"
 }
 '
 
@@ -65,17 +61,14 @@ impliedConditionalIndependencies(g)
 # Check whether the names in the graph match those in the column headers
 setdiff(names(g),colnames(d))
 
-# Execute the Chi-square tests and plot the results
-r = localTests(g, d, type='cis.chisq')
-plotLocalTestResults( r )
-
-Wife_age=d$Wa # Would be d$Wife_age when not abbreviating
-
 # Binning, could alternatively be done with cut()
+Wife_age=d$Wa # Would be d$Wife_age when not abbreviating
 Wife_age[Wife_age>=38]<-3
 Wife_age[Wife_age>=27]<-2
 Wife_age[Wife_age>3]<-1
 
+# Execute the Chi-square tests and print+plot the results
 r = localTests(g, d, type='cis.chisq')
-plotLocalTestResults( r ) # This prints the top 16 rows
-plotLocalTestResults( r[5:10,] )
+r # Print table
+plotLocalTestResults( r ) # This shows all rows of the table, but only 15 labels
+plotLocalTestResults( r[0:5,] )
