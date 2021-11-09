@@ -1,5 +1,9 @@
+# Install packages. Commend this out when not.
 #install.packages("dagitty")
 library( dagitty )
+
+# Local data file location.
+file_location <- "C:/Users/ylja0/OneDrive/Documents/school/Radboud/Master/KW1-2/Bayesian networking/bayesian-networks/data.csv"
 
 # The DAG we are going to test
 dag_string = '
@@ -33,7 +37,7 @@ dag {
 '
 
 # Read the dataset
-d <- read.csv("data.csv",sep=";",header=TRUE)
+d <- read.csv(file_location, sep=";", header=TRUE)
 
 ### Start replacing names with their abbreviated version
 # Note that replacement happens based on the indices of the two arrays
