@@ -55,6 +55,8 @@ Wr _||_ Ww              0.064816685   7.184170   1  7.354955e-03 0.000000000  0.
 
 ========================================================================================
 Original graph Ylja
+
+Note: There is no edge between Wife_working and Standard_of_living. Due to religious reasons, it is expected that the husband takes care of financial matters, which is why all edges are made correspondingly.
 ========================================================================================
 
 Graph:
@@ -179,6 +181,107 @@ Wr _||_ Ww          0.064816685   7.184170   1 7.354955e-03 0.000000000  0.11810
 Observation: Adding this edge indeed had the desired result, though the variances have increased, as well as the amount of independencies
 Observation: After realizing that the edge Wife_religion -> Wife_education is a bit biased, we saw that edges involving Wife_religion did not seem to affect the results
 
-We checked the dataset, and saw that only 220 out of the 1473 entries had Wife_religion=0, which makes sense since about 80% was expected to be religious (85% in our data)
+We checked the dataset, and saw that only 220 out of the 1473 entries had Wife_religion=0, which makes sense since about 87% was expected to be religious (85% in our data)
 So, it may be better for our model if we remove this variable altogether
 ========================================================================================
+
+Graph:
+"Husband_education" -> "Standard_of_living"
+"Husband_occupation" -> "Standard_of_living"
+"Media_exposure" -> "Contraceptive_method"
+"Number_children" -> "Contraceptive_method"
+"Standard_of_living" -> "Contraceptive_method"
+"Wife_age" -> "Number_children"
+"Wife_age" -> "Contraceptive_method"
+"Wife_education" -> "Media_exposure"
+"Wife_working" -> "Media_exposure"
+"Wife_education" -> "Husband_education"
+"Wife_education" -> "Wife_working"
+"Standard_of_living" -> "Media_exposure"
+
+Chi-squared results:
+                          rmsea          x2  df      p.value  rmsea 2.5% rmsea 97.5%
+Cm _||_ He | Sl, We 0.058550696  115.151910  84 1.363408e-02 0.012643612  0.24840168
+Cm _||_ He | Me, Sl 0.101916455   97.905430  48 2.851978e-05 0.011503363  0.28269091
+Cm _||_ Ho | He, Sl 0.134107643  132.857615  81 2.490810e-04 0.016946974  0.39417810
+Cm _||_ Ho | Sl, We 0.073768168  114.804720  88 2.907150e-02 0.006820874  0.28090561
+Cm _||_ Ho | Me, Sl 0.090044037   93.184823  48 1.009511e-04 0.026029508  0.26350580
+Cm _||_ We | Me, Sl 0.099833781  125.253436  48 8.080431e-09 0.026063660  0.28206655
+Cm _||_ Ww | Me, Sl 0.028111486   20.483025  16 1.992487e-01 0.004367183  0.28567519
+He _||_ Ho          0.136235143  254.883067   9 9.285095e-50 0.121210033  0.15560719
+He _||_ Me | Sl, We 0.057403652   47.468031  42 2.595965e-01 0.000000000  0.26691778
+He _||_ Nc          0.034346352  114.932035  42 1.059229e-08 0.034126041  0.05138781
+He _||_ Wa          0.018215540  147.353408  99 1.173750e-03 0.025534183  0.03749738
+He _||_ Ww | We     0.020325373   11.243960  12 5.081351e-01 0.000000000  0.11093961
+Ho _||_ Me | Sl, We 0.067489521   66.869573  44 1.467560e-02 0.005835471  0.32419937
+Ho _||_ Me | He, Sl 0.076020147   83.847633  41 9.018379e-05 0.011582137  0.40804702
+Ho _||_ Nc          0.012673006   51.929249  42 1.401564e-01 0.018478803  0.03770411
+Ho _||_ Wa          0.019210205  152.778292  99 4.253562e-04 0.026155250  0.03805904
+Ho _||_ We          0.150181334  307.801129   9 5.773711e-61 0.134990848  0.16932855
+Ho _||_ Ww          0.027821552    6.418155   3 9.294676e-02 0.000000000  0.06703093
+Me _||_ Nc          0.040328024   47.515812  14 1.580534e-05 0.032237455  0.06194083
+Me _||_ Wa          0.025087299   63.572403  33 1.083411e-03 0.025357551  0.04564544
+Nc _||_ Sl          0.004739167   43.388549  42 4.119668e-01 0.015344531  0.03535733
+Nc _||_ Wa          0.029587757 1057.352067 462 1.229223e-48 0.036767551  0.04201870
+Nc _||_ We          0.036081260  122.486029  42 8.403418e-10 0.035589483  0.05275700
+Nc _||_ Ww          0.028650208   30.915756  14 5.695992e-03 0.021567531  0.05286442
+Sl _||_ Wa          0.021405263  165.770427  99 3.007427e-05 0.027590682  0.03936802
+Sl _||_ We | He     0.040604283  114.625439  36 3.955246e-10 0.020221202  0.14197868
+Sl _||_ Ww | We     0.022392062   12.572337  12 4.008753e-01 0.000000000  0.11463972
+Sl _||_ Ww | He     0.030591597   20.151153  12 6.428014e-02 0.000000000  0.15801716
+Wa _||_ We          0.024280833  184.915231  99 3.711031e-07 0.029589815  0.04121311
+Wa _||_ Ww          0.012483026   40.569401  33 1.711971e-01 0.016747443  0.03867412
+
+========================================================================================
+Observation: Ho _||_ We has a high RMSEA value
+
+This makes sense, since Husband_occupation and Wife_education could indeed be dependent, just like Husband_education and Wife_education are dependent.
+After some googling, we have indeed found that research shows that couples are more likely to break up if the wife earns more money than the husband.
+As such, since this dataset is about married couples, we can expect a dependency between these variables.
+So add edge Wife_education -> Husband_occupation
+========================================================================================
+
+Graph:
+"Husband_education" -> "Standard_of_living"
+"Husband_occupation" -> "Standard_of_living"
+"Media_exposure" -> "Contraceptive_method"
+"Number_children" -> "Contraceptive_method"
+"Standard_of_living" -> "Contraceptive_method"
+"Wife_age" -> "Number_children"
+"Wife_age" -> "Contraceptive_method"
+"Wife_education" -> "Media_exposure"
+"Wife_working" -> "Media_exposure"
+"Wife_education" -> "Husband_education"
+"Wife_education" -> "Wife_working"
+"Standard_of_living" -> "Media_exposure"
+"Wife_education" -> "Husband_occupation"
+
+Chi-squared results:
+                          rmsea         x2  df      p.value  rmsea 2.5% rmsea 97.5%
+Cm _||_ He | Sl, We 0.058550696  115.15191  84 1.363408e-02 0.012643612  0.24840168
+Cm _||_ He | Me, Sl 0.101916455   97.90543  48 2.851978e-05 0.011503363  0.28269091
+Cm _||_ Ho | Sl, We 0.073768168  114.80472  88 2.907150e-02 0.006820874  0.28090561
+Cm _||_ Ho | Me, Sl 0.090044037   93.18482  48 1.009511e-04 0.026029508  0.26350580
+Cm _||_ We | Me, Sl 0.099833781  125.25344  48 8.080431e-09 0.026063660  0.28206655
+Cm _||_ Ww | Me, Sl 0.028111486   20.48303  16 1.992487e-01 0.004367183  0.28567519
+He _||_ Ho | We     0.078018033  109.44410  36 2.448864e-09 0.050452448  0.13457098
+He _||_ Me | Sl, We 0.057403652   47.46803  42 2.595965e-01 0.000000000  0.26691778
+He _||_ Nc          0.034346352  114.93204  42 1.059229e-08 0.034126041  0.05138781
+He _||_ Wa          0.018215540  147.35341  99 1.173750e-03 0.025534183  0.03749738
+He _||_ Ww | We     0.020325373   11.24396  12 5.081351e-01 0.000000000  0.11093961
+Ho _||_ Me | Sl, We 0.067489521   66.86957  44 1.467560e-02 0.005835471  0.32419937
+Ho _||_ Nc          0.012673006   51.92925  42 1.401564e-01 0.018478803  0.03770411
+Ho _||_ Wa          0.019210205  152.77829  99 4.253562e-04 0.026155250  0.03805904
+Ho _||_ Ww | We     0.014962745   11.87888  12 4.554558e-01 0.000000000  0.11990606
+Me _||_ Nc          0.040328024   47.51581  14 1.580534e-05 0.032237455  0.06194083
+Me _||_ Wa          0.025087299   63.57240  33 1.083411e-03 0.025357551  0.04564544
+Nc _||_ Sl          0.004739167   43.38855  42 4.119668e-01 0.015344531  0.03535733
+Nc _||_ Wa          0.029587757 1057.35207 462 1.229223e-48 0.036767551  0.04201870
+Nc _||_ We          0.036081260  122.48603  42 8.403418e-10 0.035589483  0.05275700
+Nc _||_ Ww          0.028650208   30.91576  14 5.695992e-03 0.021567531  0.05286442
+Sl _||_ Wa          0.021405263  165.77043  99 3.007427e-05 0.027590682  0.03936802
+Sl _||_ We | He, Ho 0.101946064  167.45389 110 3.441235e-04 0.012442353  0.47757395
+Sl _||_ Ww | We     0.022392062   12.57234  12 4.008753e-01 0.000000000  0.11463972
+Sl _||_ Ww | He, Ho 0.123492591   56.41142  41 5.507385e-02 0.002046657  0.56746724
+Wa _||_ We          0.024280833  184.91523  99 3.711031e-07 0.029589815  0.04121311
+Wa _||_ Ww          0.012483026   40.56940  33 1.711971e-01 0.016747443  0.03867412

@@ -16,7 +16,6 @@ dag {
 "Standard_of_living" [pos="-0.475,-0.787"]
 "Wife_age" [pos="-1.767,-1.344"]
 "Wife_education" [pos="-1.234,-1.109"]
-"Wife_religion" [pos="-1.545,-1.347"]
 "Wife_working" [pos="-0.929,-1.327"]
 "Husband_education" -> "Standard_of_living"
 "Husband_occupation" -> "Standard_of_living"
@@ -24,11 +23,13 @@ dag {
 "Number_children" -> "Contraceptive_method"
 "Standard_of_living" -> "Contraceptive_method"
 "Wife_age" -> "Number_children"
+"Wife_age" -> "Contraceptive_method"
 "Wife_education" -> "Media_exposure"
-"Wife_religion" -> "Media_exposure"
-"Wife_religion" -> "Wife_education"
 "Wife_working" -> "Media_exposure"
 "Wife_education" -> "Husband_education"
+"Wife_education" -> "Wife_working"
+"Standard_of_living" -> "Media_exposure"
+"Wife_education" -> "Husband_occupation"
 }
 '
 
@@ -72,3 +73,4 @@ r = localTests(g, d, type='cis.chisq')
 r # Print table
 plotLocalTestResults( r ) # This shows all rows of the table, but only 15 labels
 plotLocalTestResults( r[0:5,] )
+
