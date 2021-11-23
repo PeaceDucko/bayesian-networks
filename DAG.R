@@ -1,6 +1,9 @@
 # Install packages. Comment this out when they are already installed.
 #install.packages("dagitty")
+#install.packages("xtable")
+
 library( dagitty )
+library( xtable )
 
 # Local data file location.
 file_location <- "C:/Users/ylja0/OneDrive/Documents/school/Radboud/Master/KW1-2/Bayesian networking/bayesian-networks/data.csv"
@@ -8,15 +11,15 @@ file_location <- "C:/Users/ylja0/OneDrive/Documents/school/Radboud/Master/KW1-2/
 # The DAG we are going to test
 dag_string = '
 dag {
-"Contraceptive_method" [pos="-1.216,0.013"]
-"Husband_education" [pos="-0.614,-1.330"]
-"Husband_occupation" [pos="-0.234,-1.322"]
-"Media_exposure" [pos="-1.218,-0.544"]
-"Number_children" [pos="-1.748,-0.455"]
-"Standard_of_living" [pos="-0.475,-0.787"]
-"Wife_age" [pos="-1.767,-1.344"]
-"Wife_education" [pos="-1.234,-1.109"]
-"Wife_working" [pos="-0.929,-1.327"]
+"Contraceptive_method" [pos="0,0"]
+"Husband_education" [pos="0.3,-0.75"]
+"Husband_occupation" [pos="0.5,-0.75"]
+"Media_exposure" [pos="0,-0.25"]
+"Number_children" [pos="-0.5,-0.25"]
+"Standard_of_living" [pos="0.4,-0.5"]
+"Wife_age" [pos="-0.5,-1"]
+"Wife_education" [pos="0,-1"]
+"Wife_working" [pos="0.1,-0.75"]
 "Husband_education" -> "Standard_of_living"
 "Husband_occupation" -> "Standard_of_living"
 "Media_exposure" -> "Contraceptive_method"
@@ -72,5 +75,6 @@ Wife_age[Wife_age>3]<-1
 r = localTests(g, d, type='cis.chisq')
 r # Print table
 plotLocalTestResults( r ) # This shows all rows of the table, but only 15 labels
-plotLocalTestResults( r[0:5,] )
+#plotLocalTestResults( r[0:5,] )
 
+print(xtable(r, type = "latex"), file = "dag.tex")
