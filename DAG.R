@@ -71,10 +71,16 @@ Wife_age[Wife_age>=38]<-3
 Wife_age[Wife_age>=27]<-2
 Wife_age[Wife_age>3]<-1
 
+Number_children=d$Nc # Would be d$Number_children when not abbreviating
+Number_children[Number_children<=1]<-1
+Number_children[Number_children>1 & Number_children<4]<-2
+Number_children[Number_children>=4]<-3
+
 # Execute the Chi-square tests and print+plot the results
 r = localTests(g, d, type='cis.chisq')
 r # Print table
 plotLocalTestResults( r ) # This shows all rows of the table, but only 15 labels
 #plotLocalTestResults( r[0:5,] )
 
-print(xtable(r, type = "latex"), file = "dag.tex")
+print(xtable(r, type = "latex", digits=c(0,3,2,0,5,3,3)), file = "dag.tex")
+

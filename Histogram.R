@@ -22,15 +22,22 @@ plot_histogram <- function(variable,readable_name="variable"){
 # Read the dataset
 d <- read.csv(file_location,sep=";",header=TRUE)
 
+## Wife age
 Wife_age=d$Wife_age
-
-# Plot a histogram
 plot_histogram(Wife_age, "Wife age")
 abline(v=32, col="red") # Vertical line at the mean, age=32
 abline(h=85, col="red") # Horizontal line at the (eyeballed) average frequency, f=75
-
-# Binning, could alternatively be done with cut()
+# Binning
 Wife_age[Wife_age>=38]<-3
 Wife_age[Wife_age>=27]<-2
 Wife_age[Wife_age>3]<-1
 plot_histogram(Wife_age, "Wife age")
+
+## Number of children
+Number_children=d$Number_children
+plot_histogram(Number_children, "Number of children")
+# Binning
+Number_children[Number_children<=1]<-1
+Number_children[Number_children>1 & Number_children<4]<-2
+Number_children[Number_children>=4]<-3
+plot_histogram(Number_children, "Number of children")
