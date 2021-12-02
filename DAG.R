@@ -1,9 +1,13 @@
 # Install packages. Comment this out when they are already installed.
 #install.packages("dagitty")
 #install.packages("xtable")
+#install.packages("bnlearn")
+#install.packages("lavaan")
 
 library( dagitty )
 library( xtable )
+library( bnlearn )
+library( lavaan )
 
 # Local data file location.
 file_location <- "C:/Users/ylja0/OneDrive/Documents/school/Radboud/Master/KW1-2/Bayesian networking/bayesian-networks/data.csv"
@@ -80,7 +84,19 @@ Number_children[Number_children>=4]<-3
 r = localTests(g, d, type='cis.chisq')
 r # Print table
 plotLocalTestResults( r ) # This shows all rows of the table, but only 15 labels
-#plotLocalTestResults( r[0:5,] )
 
 print(xtable(r, type = "latex", digits=c(0,3,2,0,5,3,3)), file = "dag.tex")
 
+# List of all abbreviated columns, excluding Wife_religion
+cols = c("Cm","He","Ho","Me","Nc","Sl","Wa","We","Ww")
+# Scale the data to standard deviation 1 in order to compare the coefficients
+data_scaled <- as.data.frame(scale(d[,cols]))
+
+# Testing with bnlearn
+net <- model2network(toString(g,"bnlearn"))
+bn.fit( net, data_scaled )
+
+# Testing with lavaan
+lvsem <- toString(g,"lavaan")
+lvsem.fit <- sem(lvsem,data_scaled)
+summary(lvsem.fit)

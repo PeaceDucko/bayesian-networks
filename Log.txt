@@ -285,3 +285,30 @@ Sl _||_ Ww | We     0.022392062   12.57234  12 4.008753e-01 0.000000000  0.11463
 Sl _||_ Ww | He, Ho 0.123492591   56.41142  41 5.507385e-02 0.002046657  0.56746724
 Wa _||_ We          0.024280833  184.91523  99 3.711031e-07 0.029589815  0.04121311
 Wa _||_ Ww          0.012483026   40.56940  33 1.711971e-01 0.016747443  0.03867412
+
+========================================================================================
+At this point, we have stopped modifying our DAG and started doing some tests
+========================================================================================
+
+Results of bn.fit( net, data_scaled ):
+  
+Parameters of node Cm (Gaussian distribution)
+Conditional density: Cm | Me + Nc + Sl + Wa
+Coefficients:
+  (Intercept)             Me             Nc             Sl             Wa  
+ 3.624237e-15  -8.575648e-02   2.694255e-01   1.307904e-01  -3.228884e-01  
+Standard deviation of the residuals: 0.951525 
+
+Results of summary(sem(lvsem,data_scaled)):
+
+Regressions:
+                   Estimate  Std.Err  z-value  P(>|z|)
+  Cm ~                                                
+    Me               -0.086    0.026   -3.361    0.001
+    Nc                0.269    0.029    9.158    0.000
+    Sl                0.131    0.026    5.121    0.000
+  Cm ~                                                
+    Wa               -0.323    0.029  -10.974    0.000
+
+Observation: We see that the variables Nc and Wa have the largest correlation with Cm, meaning that it makes sense to take these variables into account.
+(-> positive correlation between Contraceptive_method and Number_children, negative correlation between Contraceptive_method and Wife_age, these both make sense)

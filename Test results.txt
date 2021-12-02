@@ -1,0 +1,133 @@
+#### Testing with bnlearn
+
+  Bayesian network parameters
+
+  Parameters of node Cm (Gaussian distribution)
+
+Conditional density: Cm | Me + Nc + Sl + Wa
+Coefficients:
+  (Intercept)             Me             Nc             Sl             Wa  
+ 3.624237e-15  -8.575648e-02   2.694255e-01   1.307904e-01  -3.228884e-01  
+Standard deviation of the residuals: 0.951525 
+
+  Parameters of node He (Gaussian distribution)
+
+Conditional density: He | We
+Coefficients:
+ (Intercept)            We  
+1.845051e-16  6.183687e-01  
+Standard deviation of the residuals: 0.7861552 
+
+  Parameters of node Ho (Gaussian distribution)
+
+Conditional density: Ho | We
+Coefficients:
+  (Intercept)             We  
+-1.610922e-16  -3.959215e-01  
+Standard deviation of the residuals: 0.9185964 
+
+  Parameters of node Me (Gaussian distribution)
+
+Conditional density: Me | Sl + We + Ww
+Coefficients:
+  (Intercept)             Sl             We             Ww  
+ 1.403107e-15  -1.511008e-01  -2.831659e-01  -2.734422e-02  
+Standard deviation of the residuals: 0.9320265 
+
+  Parameters of node Nc (Gaussian distribution)
+
+Conditional density: Nc | Wa
+Coefficients:
+  (Intercept)             Wa  
+-1.375917e-16   5.401259e-01  
+Standard deviation of the residuals: 0.8418702 
+
+  Parameters of node Sl (Gaussian distribution)
+
+Conditional density: Sl | He + Ho
+Coefficients:
+  (Intercept)             He             Ho  
+ 5.770562e-17   2.915837e-01  -1.955662e-01  
+Standard deviation of the residuals: 0.916209 
+
+  Parameters of node Wa (Gaussian distribution)
+
+Conditional density: Wa
+Coefficients:
+ (Intercept)  
+2.888238e-16  
+Standard deviation of the residuals: 1 
+
+  Parameters of node We (Gaussian distribution)
+
+Conditional density: We
+Coefficients:
+ (Intercept)  
+1.122094e-17  
+Standard deviation of the residuals: 1 
+
+  Parameters of node Ww (Gaussian distribution)
+
+Conditional density: Ww | We
+Coefficients:
+  (Intercept)             We  
+-2.914920e-17  -6.219953e-02  
+Standard deviation of the residuals: 0.9984029 
+
+####  Testing with lavaan
+
+lavaan 0.6-9 ended normally after 13 iterations
+
+  Estimator                                         ML
+  Optimization method                           NLMINB
+  Number of model parameters                        20
+                                                      
+  Number of observations                          1473
+                                                      
+Model Test User Model:
+                                                      
+  Test statistic                               392.745
+  Degrees of freedom                                22
+  P-value (Chi-square)                           0.000
+
+Parameter Estimates:
+
+  Standard errors                             Standard
+  Information                                 Expected
+  Information saturated (h1) model          Structured
+
+Regressions:
+                   Estimate  Std.Err  z-value  P(>|z|)
+  Sl ~                                                
+    He                0.292    0.025   11.851    0.000
+    Ho               -0.196    0.025   -7.948    0.000
+  Cm ~                                                
+    Me               -0.086    0.026   -3.361    0.001
+    Nc                0.269    0.029    9.158    0.000
+    Sl                0.131    0.026    5.121    0.000
+  Me ~                                                
+    Sl               -0.151    0.025   -5.984    0.000
+  Cm ~                                                
+    Wa               -0.323    0.029  -10.974    0.000
+  Nc ~                                                
+    Wa                0.540    0.022   24.632    0.000
+  He ~                                                
+    We                0.618    0.020   30.199    0.000
+  Ho ~                                                
+    We               -0.396    0.024  -16.548    0.000
+  Me ~                                                
+    We               -0.283    0.025  -11.253    0.000
+  Ww ~                                                
+    We               -0.062    0.026   -2.392    0.017
+  Me ~                                                
+    Ww               -0.027    0.024   -1.125    0.261
+
+Variances:
+                   Estimate  Std.Err  z-value  P(>|z|)
+   .Sl                0.838    0.031   27.139    0.000
+   .Cm                0.902    0.033   27.139    0.000
+   .Me                0.866    0.032   27.139    0.000
+   .Nc                0.708    0.026   27.139    0.000
+   .He                0.617    0.023   27.139    0.000
+   .Ho                0.843    0.031   27.139    0.000
+   .Ww                0.995    0.037   27.139    0.000
