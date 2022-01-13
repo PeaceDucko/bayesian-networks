@@ -133,7 +133,7 @@ score_dags <- function(dags, score_type){
 
 # Read the data from the csv file and process it
 # Returns the processed dataframe
-get_processed_data <- function(binning=TRUE, create_factors=TRUE, read_as_continuous=FALSE){
+get_processed_data <- function(binning=TRUE, create_factors=TRUE, read_as_continuous=FALSE, drop_irrelevant=FALSE){
   
   if(read_as_continuous){
     d <- read.csv(file_location, sep=";", header=TRUE, colClasses=rep("double",4))
@@ -166,6 +166,17 @@ get_processed_data <- function(binning=TRUE, create_factors=TRUE, read_as_contin
     d$Wife_religion        <- as.factor(d$Wife_religion)
     d$Wife_working         <- as.factor(d$Wife_working)
   }
+  
+  if(drop_irrelevant){
+    # List of all relevant column names, so excluding Wife_religion
+    relevant_columns = c(
+      "Contraceptive_method",
+      "Husband_education","Husband_occupation",
+      "Media_exposure","Number_children","Standard_of_living",
+      "Wife_age","Wife_education","Wife_working"
+    )
+    d <- d[,relevant_columns]
+  }
 
   return(d)
 }
@@ -173,28 +184,53 @@ get_processed_data <- function(binning=TRUE, create_factors=TRUE, read_as_contin
 ##    Start main program   ##
 
 # Read the dataset
-d <- get_processed_data() # Categorical data: read as-is, apply binning and factorizing
-#d <- get_processed_data(binning=FALSE, create_factors=FALSE, read_as_continuous=TRUE) # Continuous data
+d <- get_processed_data(drop_irrelevant=TRUE) # Treat as categorical data (read as-is, apply binning and factorizing) and drop Wife_religion
+#d <- get_processed_data() # read as-is, apply binning and factorizing, don't drop Wife_religion
 
 score_type = "bic" # Bayesian Information Criterion (categorical data)
-#score_type = "bge" # Bayesian Gaussian (continuous data)
 
-# Constraint-based Pearson's Correlation conditional independence test
+# Constraint-based PC
 structure <- learn_structure(pc.stable, "PC.stable")
 dag <- bn_to_dag(structure)
+dag
+plot(dag)
 score_dags(equivalentDAGs(dag), score_type)
 
-# Score-based Hill-Climbing
-structure <- learn_structure(hc, "hc")
-dag <- bn_to_dag(structure)
-score_dags(equivalentDAGs(dag), score_type)
-
-# Hybrid PC + HC
-structure <- learn_structure(h2pc, "h2pc") # MMHC and RSMAX2 also work
-dag <- bn_to_dag(structure)
-score_dags(equivalentDAGs(dag), score_type)
-
-# TABU
+# Score-based TABU Search
 structure <- learn_structure(tabu, "tabu")
 dag <- bn_to_dag(structure)
+dag
+plot(dag)
+score_dags(equivalentDAGs(dag), score_type)
+
+# Manually created DAG from the previous assignment
+dag_string = '
+dag {
+"Contraceptive_method" [pos="0,0"]
+"Husband_education" [pos="0.3,-0.75"]
+"Husband_occupation" [pos="0.5,-0.75"]
+"Media_exposure" [pos="0,-0.25"]
+"Number_children" [pos="-0.5,-0.25"]
+"Standard_of_living" [pos="0.4,-0.5"]
+"Wife_age" [pos="-0.5,-1"]
+"Wife_education" [pos="0,-1"]
+"Wife_working" [pos="0.1,-0.75"]
+"Husband_education" -> "Standard_of_living"
+"Husband_occupation" -> "Standard_of_living"
+"Media_exposure" -> "Contraceptive_method"
+"Number_children" -> "Contraceptive_method"
+"Standard_of_living" -> "Contraceptive_method"
+"Wife_age" -> "Number_children"
+"Wife_age" -> "Contraceptive_method"
+"Wife_education" -> "Media_exposure"
+"Wife_working" -> "Media_exposure"
+"Wife_education" -> "Husband_education"
+"Wife_education" -> "Wife_working"
+"Standard_of_living" -> "Media_exposure"
+"Wife_education" -> "Husband_occupation"
+}
+'
+dag <- dagitty(dag_string)
+dag
+plot(dag)
 score_dags(equivalentDAGs(dag), score_type)
